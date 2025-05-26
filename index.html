@@ -38,13 +38,12 @@
                         <div class="profile-pic"><img src="img/cover 3.png" alt=""></div>
                         <p class="username">Жевуны</p>
                     </div>
-                                        <div class="status-card">
+                    <div class="status-card">
                         <div class="profile-pic"><img src="img/cover 14.png" alt=""></div>
                         <p class="username">Лев</p>
                     </div>
-                    <!-- Добавь ещё 5 status-card, если нужно -->
                 </div>
-                <div class="post">
+                <div class="post" data-id="post1">
                     <div class="info">
                         <div class="user">
                             <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
@@ -68,42 +67,80 @@
                         <img src="img/smile.PNG" class="icon" alt="Smile">
                         <input type="text" class="comment-box" placeholder="Add a comment">
                         <button class="comment-btn">post</button>
+                    </div>
                 </div>
-                <!-- Убери второй пост и комментарии, если нужен только один пост -->
-            </div>
-                <!-- Добавь остальные profile-card, если нужно -->
             </div>
         </div>
     </section>
-    <script>
+    <script type="module">
+        // Импорт Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+        import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+        // Конфигурация Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDXGD8XuoVydCTselGHKezUiF1uRSUe6s0",
+            authDomain: "iron-grand.firebaseapp.com",
+            databaseURL: "https://iron-grand-default-rtdb.firebaseio.com",
+            projectId: "iron-grand",
+            storageBucket: "iron-grand.firebasestorage.app",
+            messagingSenderId: "389120686061",
+            appId: "1:389120686061:web:ca2135c8916f4081d999e4"
+        };
+
+        // Инициализация Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Элементы DOM
         const likeButton = document.getElementById('likeButton');
         const likeCount = document.getElementById('likeCount');
-        const imageInput = document.getElementById('imageInput');
-        const postImage = document.getElementById('postImage');
-        let likes = 0;
-        let isLiked = false;
+        const postId = document.querySelector('.post').dataset.id;
 
-        likeButton.addEventListener('click', () => {
-            if (!isLiked) {
-                likes += 1;
-                isLiked = true;
-                likeButton.style.filter = 'invert(26%) sepia(86%) saturate(7490%) hue-rotate(335deg) brightness(94%) contrast(103%)';
+        // Генерируем уникальный ID пользователя
+        let userId = localStorage.getItem('userId');
+        if (!userId) {
+            userId = 'user_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('userId', userId);
+        }
+
+        // Функция для обновления UI
+        function updateLikeButton(likes, isLiked) {
+            likeCount.textContent = `${likes} лайков`;
+            if (isLiked) {
+                likeButton.classList.add('liked');
             } else {
-                likes -= 1;
-                isLiked = false;
-                likeButton.style.filter = 'none';
+                likeButton.classList.remove('liked');
             }
-            likeCount.textContent = `${likes} likes`;
+        }
+
+        // Получаем и обновляем лайки в реальном времени
+        onSnapshot(doc(db, 'posts', postId), (docSnap) => {
+            const data = docSnap.data();
+            const likes = data ? data.likes : 0;
+            const userLikes = data && data.userLikes ? data.userLikes : [];
+            const isLiked = userLikes.includes(userId);
+            updateLikeButton(likes, isLiked);
         });
 
-        imageInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    postImage.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
+        // Обработка нажатия на кнопку лайка
+        likeButton.addEventListener('click', async () => {
+            const postRef = doc(db, 'posts', postId);
+            const docSnap = await postRef.get();
+            const data = docSnap.data() || { likes: 0, userLikes: [] };
+
+            if (data.userLikes.includes(userId)) {
+                // Убираем лайк
+                await setDoc(postRef, {
+                    likes: data.likes - 1,
+                    userLikes: data.userLikes.filter(id => id !== userId)
+                }, { merge: true });
+            } else {
+                // Добавляем лайк
+                await setDoc(postRef, {
+                    likes: data.likes + 1,
+                    userLikes: [...data.userLikes, userId]
+                }, { merge: true });
             }
         });
     </script>
