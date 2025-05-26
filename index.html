@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Clone</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-wrapper">
+            <img src="img/logo.PNG" class="brand-img" alt="Logo">
+            <input type="text" class="search-box" placeholder="search">
+            <div class="nav-items">
+                <img src="img/home.PNG" class="icon" alt="Home">
+                <img src="img/messenger.PNG" class="icon" alt="Messenger">
+                <img src="img/add.PNG" class="icon" alt="Add">
+                <img src="img/explore.PNG" class="icon" alt="Explore">
+                <img src="img/like.PNG" class="icon" alt="Like">
+                <div class="icon user-profile"></div>
+            </div>
+        </div>
+    </nav>
+    <section class="main">
+        <div class="wrapper">
+            <div class="left-col">
+                <div class="status-wrapper">
+                    <div class="status-card">
+                        <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
+                        <p class="username">Страшила</p>
+                    </div>
+                    <div class="status-card">
+                        <div class="profile-pic"><img src="img/cover 2.png" alt=""></div>
+                        <p class="username">Виллина</p>
+                    </div>
+                    <div class="status-card">
+                        <div class="profile-pic"><img src="img/cover 3.png" alt=""></div>
+                        <p class="username">Жевуны</p>
+                    </div>
+                                        <div class="status-card">
+                        <div class="profile-pic"><img src="img/cover 14.png" alt=""></div>
+                        <p class="username">Лев</p>
+                    </div>
+                    <!-- Добавь ещё 5 status-card, если нужно -->
+                </div>
+                <div class="post">
+                    <div class="info">
+                        <div class="user">
+                            <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
+                            <p class="username">Железная_Бабушка</p>
+                        </div>
+                        <img src="img/option.PNG" class="options" alt="">
+                    </div>
+                    <img src="img/cover 1.png" class="post-image" id="postImage" alt="Post image">
+                    <div class="post-content">
+                        <div class="reaction-wrapper">
+                            <img src="img/like.PNG" class="icon like-button" id="likeButton" alt="Like">
+                            <img src="img/comment.PNG" class="icon" alt="Comment">
+                            <img src="img/send.PNG" class="icon" alt="Send">
+                            <img src="img/save.PNG" class="save icon" alt="Save">
+                        </div>
+                        <p class="лайков" id="likeCount">0 Лайков</p>
+                        <p class="description"><span>Железная_Бабушка</span> Это я с детьми!</p>
+                        <p class="post-time">2 минуты назад</p>
+                    </div>
+                    <div class="comment-wrapper">
+                        <img src="img/smile.PNG" class="icon" alt="Smile">
+                        <input type="text" class="comment-box" placeholder="Add a comment">
+                        <button class="comment-btn">post</button>
+                </div>
+                <!-- Убери второй пост и комментарии, если нужен только один пост -->
+            </div>
+                <!-- Добавь остальные profile-card, если нужно -->
+            </div>
+        </div>
+    </section>
+    <script>
+        const likeButton = document.getElementById('likeButton');
+        const likeCount = document.getElementById('likeCount');
+        const imageInput = document.getElementById('imageInput');
+        const postImage = document.getElementById('postImage');
+        let likes = 0;
+        let isLiked = false;
+
+        likeButton.addEventListener('click', () => {
+            if (!isLiked) {
+                likes += 1;
+                isLiked = true;
+                likeButton.style.filter = 'invert(26%) sepia(86%) saturate(7490%) hue-rotate(335deg) brightness(94%) contrast(103%)';
+            } else {
+                likes -= 1;
+                isLiked = false;
+                likeButton.style.filter = 'none';
+            }
+            likeCount.textContent = `${likes} likes`;
+        });
+
+        imageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    postImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
