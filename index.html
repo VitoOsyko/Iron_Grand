@@ -60,7 +60,7 @@
                             <img src="img/send.PNG" class="icon" alt="Send">
                             <img src="img/save.PNG" class="save icon" alt="Save">
                         </div>
-                        <p class="likes like-count">0 Лайков</p>
+                        <p class="likes like-count">5 лайков</p>
                         <p class="description"><span>Железная_Бабушка</span> С детьми на утреннике!</p>
                         <p class="post-time">2 минуты назад</p>
                     </div>
@@ -87,7 +87,7 @@
                             <img src="img/send.PNG" class="icon" alt="Send">
                             <img src="img/save.PNG" class="save icon" alt="Save">
                         </div>
-                        <p class="likes like-count">12 Лайков</p>
+                        <p class="likes like-count">0 лайков</p>
                         <p class="description"><span>Железная_Бабушка</span> Люблю картины!</p>
                         <p class="post-time">52 минуты назад</p>
                     </div>
@@ -114,7 +114,7 @@
                             <img src="img/send.PNG" class="icon" alt="Send">
                             <img src="img/save.PNG" class="save icon" alt="Save">
                         </div>
-                        <p class="likes like-count">8 Лайков</p>
+                        <p class="likes like-count">0 лайков</p>
                         <p class="description"><span>Железная_Бабушка</span> Гладила вещи! Рутина, эх.</p>
                         <p class="post-time">14 дней назад</p>
                     </div>
@@ -141,7 +141,7 @@
                             <img src="img/send.PNG" class="icon" alt="Send">
                             <img src="img/save.PNG" class="save icon" alt="Save">
                         </div>
-                        <p class="likes like-count">22 Лайка</p>
+                        <p class="likes like-count">0 лайков</p>
                         <p class="description"><span>Железная_Бабушка</span> Сегодня готовила блины!</p>
                         <p class="post-time">2 недели назад</p>
                     </div>
@@ -151,7 +151,6 @@
                         <button class="comment-btn">post</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -181,8 +180,9 @@
             const likeButton = post.querySelector('.like-button');
             const likeCount = post.querySelector('.like-count');
 
-            // Сохраняем начальный текст из HTML
-            const initialLikesText = likeCount.textContent.trim(); // "12 Лайков", "22 Лайка" и т.д.
+            // Получаем начальное значение лайков из HTML
+            const initialLikesText = likeCount.textContent.trim(); // "0 лайков", "12 лайков" и т.д.
+            const initialLikes = parseInt(initialLikesText) || 0; // Извлекаем число
 
             // Генерируем уникальный ID пользователя
             let userId = localStorage.getItem('userId');
@@ -191,9 +191,9 @@
                 localStorage.setItem('userId', userId);
             }
 
-            // Функция для обновления UI с сохранением исходного текста
+            // Функция для обновления UI
             function updateLikeButton(likes, isLiked) {
-                likeCount.textContent = likes; // Используем переданный текст напрямую
+                likeCount.textContent = `${likes} лайков`;
                 if (isLiked) {
                     likeButton.classList.add('liked');
                 } else {
@@ -202,7 +202,7 @@
             }
 
             // Устанавливаем начальное значение из HTML
-            updateLikeButton(initialLikesText, false);
+            updateLikeButton(initialLikes, false);
 
             // Флаг для отслеживания первого клика
             let isFirstClick = true;
@@ -211,32 +211,38 @@
             likeButton.addEventListener('click', async () => {
                 try {
                     const postRef = doc(db, 'posts', postId);
-                    const docSnap = await getDoc(postRef);
-                    let data = docSnap.data();
+                    let data;
 
                     if (isFirstClick) {
-                        // При первом клике создаём документ с начальным значением
-                        const initialLikes = parseInt(initialLikesText) || 0;
+                        // При первом клике проверяем, есть ли документ в Firestore
+                        const docSnap = await getDoc(postRef);
                         if (!docSnap.exists()) {
+                            // Если документа нет, создаём его с начальным значением из HTML
                             await setDoc(postRef, {
                                 likes: initialLikes,
                                 userLikes: []
                             });
                         }
+                        data = docSnap.exists() ? docSnap.data() : { likes: initialLikes, userLikes: [] };
+
                         // Начинаем синхронизацию с Firestore
                         onSnapshot(postRef, (docSnap) => {
                             const data = docSnap.data();
-                            const likes = data.likes || 0;
-                            const userLikes = data.userLikes || [];
+                            const likes = data ? data.likes : initialLikes;
+                            const userLikes = data ? data.userLikes : [];
                             const isLiked = userLikes.includes(userId);
-                            updateLikeButton(`${likes} лайков`, isLiked); // Форматируем как "X лайков"
+                            updateLikeButton(likes, isLiked);
                         }, (error) => {
                             console.error(`Ошибка onSnapshot для ${postId}:`, error);
                         });
                         isFirstClick = false;
+                    } else {
+                        // Для последующих кликов получаем актуальные данные
+                        const docSnap = await getDoc(postRef);
+                        data = docSnap.data();
                     }
 
-                    if (data && data.userLikes.includes(userId)) {
+                    if (data.userLikes.includes(userId)) {
                         // Убираем лайк
                         await setDoc(postRef, {
                             likes: data.likes - 1,
@@ -245,8 +251,8 @@
                     } else {
                         // Добавляем лайк
                         await setDoc(postRef, {
-                            likes: data ? data.likes + 1 : (parseInt(initialLikesText) || 0) + 1,
-                            userLikes: data ? [...data.userLikes, userId] : [userId]
+                            likes: data.likes + 1,
+                            userLikes: [...data.userLikes, userId]
                         }, { merge: true });
                     }
                 } catch (error) {
