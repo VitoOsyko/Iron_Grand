@@ -75,7 +75,7 @@
     <script type="module">
         // Импорт Firebase SDK
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-        import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
         // Конфигурация Firebase
         const firebaseConfig = {
@@ -121,26 +121,32 @@
             const userLikes = data && data.userLikes ? data.userLikes : [];
             const isLiked = userLikes.includes(userId);
             updateLikeButton(likes, isLiked);
+        }, (error) => {
+            console.error('Ошибка onSnapshot:', error);
         });
 
         // Обработка нажатия на кнопку лайка
         likeButton.addEventListener('click', async () => {
-            const postRef = doc(db, 'posts', postId);
-            const docSnap = await postRef.get();
-            const data = docSnap.data() || { likes: 0, userLikes: [] };
+            try {
+                const postRef = doc(db, 'posts', postId);
+                const docSnap = await getDoc(postRef);
+                const data = docSnap.data() || { likes: 0, userLikes: [] };
 
-            if (data.userLikes.includes(userId)) {
-                // Убираем лайк
-                await setDoc(postRef, {
-                    likes: data.likes - 1,
-                    userLikes: data.userLikes.filter(id => id !== userId)
-                }, { merge: true });
-            } else {
-                // Добавляем лайк
-                await setDoc(postRef, {
-                    likes: data.likes + 1,
-                    userLikes: [...data.userLikes, userId]
-                }, { merge: true });
+                if (data.userLikes.includes(userId)) {
+                    // Убираем лайк
+                    await setDoc(postRef, {
+                        likes: data.likes - 1,
+                        userLikes: data.userLikes.filter(id => id !== userId)
+                    }, { merge: true });
+                } else {
+                    // Добавляем лайк
+                    await setDoc(postRef, {
+                        likes: data.likes + 1,
+                        userLikes: [...data.userLikes, userId]
+                    }, { merge: true });
+                }
+            } catch (error) {
+                console.error('Ошибка при обновлении лайков:', error);
             }
         });
     </script>
