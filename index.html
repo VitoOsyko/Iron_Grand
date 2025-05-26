@@ -27,7 +27,7 @@
             <div class="left-col">
                 <div class="status-wrapper">
                     <div class="status-card">
-                        <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
+                        <div class="profile-pic"><img src="img/cover 13.png" alt=""></div>
                         <p class="username">Страшила</p>
                     </div>
                     <div class="status-card">
@@ -43,6 +43,7 @@
                         <p class="username">Лев</p>
                     </div>
                 </div>
+
                 <div class="post" data-id="post1">
                     <div class="info">
                         <div class="user">
@@ -51,17 +52,98 @@
                         </div>
                         <img src="img/option.PNG" class="options" alt="">
                     </div>
-                    <img src="img/cover 1.png" class="post-image" id="postImage" alt="Post image">
+                    <img src="img/cover 1.png" class="post-image" alt="Post image">
                     <div class="post-content">
                         <div class="reaction-wrapper">
-                            <img src="img/like.PNG" class="icon like-button" id="likeButton" alt="Like">
+                            <img src="img/like.PNG" class="icon like-button" alt="Like">
                             <img src="img/comment.PNG" class="icon" alt="Comment">
                             <img src="img/send.PNG" class="icon" alt="Send">
                             <img src="img/save.PNG" class="save icon" alt="Save">
                         </div>
-                        <p class="лайков" id="likeCount">0 Лайков</p>
-                        <p class="description"><span>Железная_Бабушка</span> Это я с детьми!</p>
+                        <p class="likes like-count">5 лайков</p>
+                        <p class="description"><span>Железная_Бабушка</span> С детьми на утреннике!</p>
                         <p class="post-time">2 минуты назад</p>
+                    </div>
+                    <div class="comment-wrapper">
+                        <img src="img/smile.PNG" class="icon" alt="Smile">
+                        <input type="text" class="comment-box" placeholder="Add a comment">
+                        <button class="comment-btn">post</button>
+                    </div>
+                </div>
+
+                <div class="post" data-id="post2">
+                    <div class="info">
+                        <div class="user">
+                            <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
+                            <p class="username">Железная_Бабушка</p>
+                        </div>
+                        <img src="img/option.PNG" class="options" alt="">
+                    </div>
+                    <img src="img/cover 16.png" class="post-image" alt="Post image">
+                    <div class="post-content">
+                        <div class="reaction-wrapper">
+                            <img src="img/like.PNG" class="icon like-button" alt="Like">
+                            <img src="img/comment.PNG" class="icon" alt="Comment">
+                            <img src="img/send.PNG" class="icon" alt="Send">
+                            <img src="img/save.PNG" class="save icon" alt="Save">
+                        </div>
+                        <p class="likes like-count">0 лайков</p>
+                        <p class="description"><span>Железная_Бабушка</span> Люблю картины!</p>
+                        <p class="post-time">52 минуты назад</p>
+                    </div>
+                    <div class="comment-wrapper">
+                        <img src="img/smile.PNG" class="icon" alt="Smile">
+                        <input type="text" class="comment-box" placeholder="Add a comment">
+                        <button class="comment-btn">post</button>
+                    </div>
+                </div>
+
+                <div class="post" data-id="post3">
+                    <div class="info">
+                        <div class="user">
+                            <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
+                            <p class="username">Железная_Бабушка</p>
+                        </div>
+                        <img src="img/option.PNG" class="options" alt="">
+                    </div>
+                    <img src="img/cover 15.png" class="post-image" alt="Post image">
+                    <div class="post-content">
+                        <div class="reaction-wrapper">
+                            <img src="img/like.PNG" class="icon like-button" alt="Like">
+                            <img src="img/comment.PNG" class="icon" alt="Comment">
+                            <img src="img/send.PNG" class="icon" alt="Send">
+                            <img src="img/save.PNG" class="save icon" alt="Save">
+                        </div>
+                        <p class="likes like-count">0 лайков</p>
+                        <p class="description"><span>Железная_Бабушка</span> Гладила вещи! Рутина, эх.</p>
+                        <p class="post-time">14 дней назад</p>
+                    </div>
+                    <div class="comment-wrapper">
+                        <img src="img/smile.PNG" class="icon" alt="Smile">
+                        <input type="text" class="comment-box" placeholder="Add a comment">
+                        <button class="comment-btn">post</button>
+                    </div>
+                </div>
+
+                <div class="post" data-id="post4">
+                    <div class="info">
+                        <div class="user">
+                            <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
+                            <p class="username">Железная_Бабушка</p>
+                        </div>
+                        <img src="img/option.PNG" class="options" alt="">
+                    </div>
+                    <img src="img/cover 17.png" class="post-image" alt="Post image">
+                    <div class="post-content">
+                        <div class="reaction-wrapper">
+                            <img src="img/like.PNG" class="icon like-button" alt="Like">
+                            <img src="img/comment.PNG" class="icon" alt="Comment">
+                            <img src="img/send.PNG" class="icon" alt="Send">
+                            <img src="img/save.PNG" class="save icon" alt="Save">
+                        </div>
+                        <p class="likes like-count">0 лайков</p>
+                        <p class="description"><span>Железная_Бабушка</span> Сегодня готовила блины!</p>
+                        <p class="post-time">2 недели назад</p>
                     </div>
                     <div class="comment-wrapper">
                         <img src="img/smile.PNG" class="icon" alt="Smile">
@@ -89,21 +171,18 @@
         };
 
         // Инициализация Firebase
-        try {
-            const app = initializeApp(firebaseConfig);
-            const db = getFirestore(app);
-            console.log("Firebase и Firestore инициализированы успешно");
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-            // Элементы DOM
-            const likeButton = document.getElementById('likeButton');
-            const likeCount = document.getElementById('likeCount');
-            const postId = document.querySelector('.post').dataset.id;
+        // Обрабатываем все посты
+        document.querySelectorAll('.post').forEach(post => {
+            const postId = post.dataset.id;
+            const likeButton = post.querySelector('.like-button');
+            const likeCount = post.querySelector('.like-count');
 
-            // Проверяем, что элементы найдены
-            if (!likeButton || !likeCount || !postId) {
-                throw new Error("Не найдены элементы DOM: likeButton, likeCount или postId");
-            }
-            console.log("DOM элементы найдены:", { likeButton, likeCount, postId });
+            // Получаем начальное значение лайков из HTML
+            const initialLikesText = likeCount.textContent.trim();
+            const initialLikes = parseInt(initialLikesText) || 0;
 
             // Генерируем уникальный ID пользователя
             let userId = localStorage.getItem('userId');
@@ -111,73 +190,63 @@
                 userId = 'user_' + Math.random().toString(36).substr(2, 9);
                 localStorage.setItem('userId', userId);
             }
-            console.log("User ID:", userId);
 
             // Функция для обновления UI
             function updateLikeButton(likes, isLiked) {
-                console.log("Обновление UI: likes =", likes, "isLiked =", isLiked);
                 likeCount.textContent = `${likes} лайков`;
                 if (isLiked) {
                     likeButton.classList.add('liked');
-                    console.log("Добавлен класс .liked");
                 } else {
                     likeButton.classList.remove('liked');
-                    console.log("Удален класс .liked");
                 }
             }
 
-            // Проверяем, работает ли onSnapshot
-            console.log("Настройка onSnapshot для postId:", postId);
+            // Синхронизация с Firestore при загрузке
             onSnapshot(doc(db, 'posts', postId), (docSnap) => {
-                console.log("Получены данные из Firestore:", docSnap.data());
-                const data = docSnap.data();
-                const likes = data ? data.likes : 0;
-                const userLikes = data && data.userLikes ? data.userLikes : [];
-                const isLiked = userLikes.includes(userId);
-                updateLikeButton(likes, isLiked);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    const likes = data.likes || 0;
+                    const userLikes = data.userLikes || [];
+                    const isLiked = userLikes.includes(userId);
+                    updateLikeButton(likes, isLiked);
+                } else {
+                    // Если данных нет, используем начальное значение из HTML
+                    updateLikeButton(initialLikes, false);
+                }
             }, (error) => {
-                console.error('Ошибка onSnapshot:', error);
+                console.error(`Ошибка onSnapshot для ${postId}:`, error);
             });
 
-            // Проверяем, работает ли клик
-            console.log("Добавляем обработчик клика на likeButton");
+            // Обработка нажатия на кнопку лайка
             likeButton.addEventListener('click', async () => {
-                console.log("Клик по кнопке лайка");
                 try {
                     const postRef = doc(db, 'posts', postId);
-                    console.log("Получаем данные поста...");
                     const docSnap = await getDoc(postRef);
+                    let data = docSnap.exists() ? docSnap.data() : { likes: initialLikes, userLikes: [] };
+
                     if (!docSnap.exists()) {
-                        console.log("Документ не существует, создаем новый");
-                        await setDoc(postRef, { likes: 0, userLikes: [] });
+                        // Если документа нет, создаём его с начальным значением
+                        await setDoc(postRef, data);
                     }
-                    const data = docSnap.data() || { likes: 0, userLikes: [] };
-                    console.log("Текущие данные поста:", data);
 
                     if (data.userLikes.includes(userId)) {
                         // Убираем лайк
-                        console.log("Убираем лайк...");
                         await setDoc(postRef, {
                             likes: data.likes - 1,
                             userLikes: data.userLikes.filter(id => id !== userId)
                         }, { merge: true });
-                        console.log("Лайк убран");
                     } else {
                         // Добавляем лайк
-                        console.log("Добавляем лайк...");
                         await setDoc(postRef, {
                             likes: data.likes + 1,
                             userLikes: [...data.userLikes, userId]
                         }, { merge: true });
-                        console.log("Лайк добавлен");
                     }
                 } catch (error) {
-                    console.error('Ошибка при обновлении лайков:', error);
+                    console.error(`Ошибка при обновлении лайков для ${postId}:`, error);
                 }
             });
-        } catch (error) {
-            console.error('Ошибка инициализации Firebase/Firestore:', error);
-        }
+        });
     </script>
 </body>
 </html>
